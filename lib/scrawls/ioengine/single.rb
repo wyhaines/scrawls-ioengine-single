@@ -51,9 +51,9 @@ module Scrawls
 
       def handle request
         if request
-          @scrawls.process request, @connection
+          @scrawls.process request, self
         else
-          @scrawls.deliver_400 @connection
+          @scrawls.deliver_400 self
         end
       end
 

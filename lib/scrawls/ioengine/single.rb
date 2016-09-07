@@ -1,4 +1,5 @@
-require "scrawls/ioengine/single/version"
+require 'scrawls/ioengine/single/version'
+require 'scrawls/ioengine/base'
 require 'socket'
 require 'mime-types'
 

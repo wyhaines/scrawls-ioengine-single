@@ -12,12 +12,15 @@ module Scrawls
       end
 
       def run( config = {} )
-        host = config[:host] || '127.0.0.1'
-        port = config[:port] || '8080'
-        server = TCPServer.new( host, port )
+        server = TCPServer.new( config[:host], config[:port] )
 
-        while @connection = server.accept
-          request = get_request @connection
+        do_main_loop server
+      end
+
+      def do_main_loop server
+        while connection = server.accept
+          Thread.current[:connection] = connection
+          request = get_request connection
           response = handle request
 
           close
@@ -25,11 +28,11 @@ module Scrawls
       end
 
       def send_data data
-        @connection.write data
+        Thread.current[:connection].write data
       end
 
       def close
-        @connection.close
+        Thread.current[:onnection].close
       end
 
       def get_request connection

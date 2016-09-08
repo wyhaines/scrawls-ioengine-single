@@ -32,7 +32,7 @@ module Scrawls
       end
 
       def close
-        Thread.current[:onnection].close
+        Thread.current[:connection].close
       end
 
       def get_request connection

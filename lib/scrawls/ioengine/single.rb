@@ -2,6 +2,11 @@ require 'scrawls/ioengine/single/version'
 require 'scrawls/ioengine/base'
 require 'socket'
 require 'mime-types'
+if RUBY_PLATFORM =~ /linux/
+  require 'scrawls/ioengine/single/enable_tcp_cork'
+else
+  require 'scrawls/ioengine/single/disable_tcp_cork'
+end
 
 module Scrawls
   module Ioengine
@@ -21,7 +26,9 @@ module Scrawls
         while connection = server.accept
           Thread.current[:connection] = connection
           request = get_request connection
+          cork_tcp_socket connection
           response = handle request
+          uncork_tcp_socket connection
 
           close
         end
